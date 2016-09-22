@@ -115,6 +115,9 @@ function prompt_command() {
   second_line="\`if [ \$? = 0 ]; then echo \[\$BLUE\]; else echo \[\$RED\]; fi\`\$prompt_symbol\[\$NOCOLOR\] "
   PS1="\n$first_line\n$second_line"
 
+  # Show command execution time
+  BCTPostCommand
+
   # Multiline command
   PS2="\[$BLUE\]$prompt_symbol\[$NOCOLOR\] "
 
@@ -123,6 +126,5 @@ function prompt_command() {
   [ -n "$remote" ] && title="$title \xE2\x80\x94 $HOSTNAME"
   echo -ne "\033]0;$title"; echo -ne "\007"
 }
-
 # Show awesome prompt only if Git is installed
 command -v git >/dev/null 2>&1 && PROMPT_COMMAND=prompt_command
