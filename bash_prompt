@@ -70,24 +70,20 @@ function prompt_command() {
     # check whether branches are in sync
     git remote update > /dev/null 2>&1
     local local_status=$(git rev-parse @ 2>/dev/null)
-    local remote_status=$(git rev-parse @{u} 2>/dev/null)
-    local base_status=$(git merge-base @ @{u} 2>/dev/null)
-    if [ $local_status = $remote_status ]; then
-      git_prompt="$git_prompt$NOCOLOR"
-    elif [ $local_status = $base_status ]; then
-      git_prompt="$git_prompt$prompt_unpulled_symbol$NOCOLOR"
-    elif [ $remote_status = $base_status ]; then
-      git_prompt="$git_prompt$prompt_unpushed_symbol$NOCOLOR"
-    else
-      git_prompt="$git_prompt$prompt_diverged_symbol$NOCOLOR"
+    if [[ $local_status != "@" ]]
+    then
+      local remote_status=$(git rev-parse @{u} 2>/dev/null)
+      local base_status=$(git merge-base @ @{u} 2>/dev/null)
+      if [ $local_status = $remote_status ]; then
+        git_prompt="$git_prompt$NOCOLOR"
+      elif [ $local_status = $base_status ]; then
+        git_prompt="$git_prompt$prompt_unpulled_symbol$NOCOLOR"
+      elif [ $remote_status = $base_status ]; then
+        git_prompt="$git_prompt$prompt_unpushed_symbol$NOCOLOR"
+      else
+        git_prompt="$git_prompt$prompt_diverged_symbol$NOCOLOR"
+      fi
     fi
-
-    # # Format Git info
-    # if [ -n "$dirty" ]; then
-    #   git_prompt=" $RED$branch$prompt_dirty_symbol$NOCOLOR"
-    # else
-    #   git_prompt=" $GRAY$branch$prompt_clean_symbol$NOCOLOR"
-    # fi
   fi
 
   # Virtual env
