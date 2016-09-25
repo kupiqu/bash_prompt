@@ -83,6 +83,8 @@ function prompt_command() {
       else
         git_prompt="$git_prompt$prompt_diverged_symbol$NOCOLOR"
       fi
+    else
+      git_prompt="$git_prompt$NOCOLOR"
     fi
   fi
 
