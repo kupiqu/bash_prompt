@@ -112,8 +112,7 @@ function BCTPreCommand() {
   BCT_COMMAND_START_TIME=$(eval $BCTTime)
 }
 
-trap 'BCTPreCommand' DEBUG
-trap 'previous_command=$this_command; this_command=$BASH_COMMAND' DEBUG
+trap 'BCTPreCommand;previous_command=$this_command; this_command=$BASH_COMMAND' DEBUG
 
 # Bash will automatically set COLUMNS to the current terminal width.
 # export COLUMNS
