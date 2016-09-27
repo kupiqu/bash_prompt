@@ -164,7 +164,7 @@ function BCTPostCommand() {
   time_str="${time_str}${num_secs}s${num_msecs_pretty}"
   local availmem_str="mem "$(grep MemAvailable /proc/meminfo | awk '{print $2}' | xargs -I {} echo "scale=2; {}/1024^2" | bc)"G"
   now_str=$(BCTPrintTime $(($command_end_time / $SEC)))
-  local availdisk_str="sdd "$(df . | awk '/[0-9]%/{print $(NF-2)}' | xargs -I {} echo "scale=2; {}/1024^2" | bc)"G"
+  local availdisk_str="sda "$(df . | awk '/[0-9]%/{print $(NF-2)}' | xargs -I {} echo "scale=2; {}/1024^2" | bc)"G"
   if [ -n "$now_str" ]; then
     local output_str="[ $time_str | $availmem_str | $availdisk_str | $now_str ]"
   else
