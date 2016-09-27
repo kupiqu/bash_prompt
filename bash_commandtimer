@@ -114,7 +114,7 @@ function BCTPreCommand() {
 trap 'BCTPreCommand' DEBUG
 
 # Bash will automatically set COLUMNS to the current terminal width.
-export COLUMNS
+# export COLUMNS
 
 # Flag to prevent printing out the time upon first login.
 BCT_FIRST_PROMPT=1
