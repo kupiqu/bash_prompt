@@ -1,3 +1,5 @@
+#!/bin/bash
+
 #
 # Highly based on:
 # https://github.com/sapegin/dotfiles/blob/dd063f9c30de7d2234e8accdb5272a5cc0a3388b/includes/bash_prompt.bash
