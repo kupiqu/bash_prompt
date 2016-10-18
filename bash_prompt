@@ -12,6 +12,7 @@
 #
 
 local_username= # currently empty
+
 # Colors
 GRAY="$(tput setaf 0)"
 RED="$(tput setaf 1)"
@@ -21,10 +22,11 @@ BLUE="$(tput setaf 4)"
 MAGENTA="$(tput setaf 5)"
 CYAN="$(tput setaf 6)"
 WHITE="$(tput setaf 7)"
+# Format needs to be applied before color
 BOLD="$(tput bold)"
 UNDERLINE="$(tput sgr 0 1)"
 INVERT="$(tput sgr 1 0)"
-NOCOLOR="$(tput sgr0)"
+DEFAULT="$(tput sgr0)" # default color and format
 
 # User color
 case $(id -u) in
@@ -77,49 +79,49 @@ function prompt_command() {
     if [ $local_status != "@" ] && [ ! -z "$remote_status" ] && [ ! -z "$base_status" ]
     then
       if [ $local_status = $remote_status ]; then
-        git_prompt="$git_prompt$NOCOLOR"
+        git_prompt="$git_prompt$DEFAULT"
       elif [ $local_status = $base_status ]; then
-        git_prompt="$git_prompt$prompt_unpulled_symbol$NOCOLOR"
+        git_prompt="$git_prompt$prompt_unpulled_symbol$DEFAULT"
       elif [ $remote_status = $base_status ]; then
-        git_prompt="$git_prompt$prompt_unpushed_symbol$NOCOLOR"
+        git_prompt="$git_prompt$prompt_unpushed_symbol$DEFAULT"
       else
-        git_prompt="$git_prompt$prompt_diverged_symbol$NOCOLOR"
+        git_prompt="$git_prompt$prompt_diverged_symbol$DEFAULT"
       fi
     else
-      git_prompt="$git_prompt$NOCOLOR"
+      git_prompt="$git_prompt$DEFAULT"
     fi
   fi
 
   # Virtual env
   local virtual_env_prompt=
   if [ -n "$VIRTUAL_ENV" ]; then
-    virtual_env_prompt=" $YELLOW$prompt_virtual_env_symbol$(basename $VIRTUAL_ENV)$NOCOLOR"
+    virtual_env_prompt=" $YELLOW$prompt_virtual_env_symbol$(basename $VIRTUAL_ENV)$DEFAULT"
   fi
 
   # Only show username if not default
   local user_prompt=
-  [ "$USER" != "$local_username" ] && user_prompt="$user_color$USER$NOCOLOR"
+  [ "$USER" != "$local_username" ] && user_prompt="$user_color$USER$DEFAULT"
 
   # Show hostname inside SSH session
   local host_prompt=
-  [ -n "$remote" ] && host_prompt="@$YELLOW$HOSTNAME$NOCOLOR"
+  [ -n "$remote" ] && host_prompt="@$YELLOW$HOSTNAME$DEFAULT"
 
   # Show delimiter if user or host visible
   local login_delimiter=
   [ -n "$user_prompt" ] || [ -n "$host_prompt" ] && login_delimiter=":"
 
   # Format prompt
-  first_line="$user_prompt$host_prompt$login_delimiter$WHITE\w$NOCOLOR$git_prompt$virtual_env_prompt"
+  first_line="$user_prompt$host_prompt$login_delimiter$WHITE\w$DEFAULT$git_prompt$virtual_env_prompt"
   # Text (commands) inside \[...\] does not impact line length calculation which fixes stange bug when looking through the history
   # $? is a status of last command, should be processed every time prompt prints
-  second_line="\`if [ \$? = 0 ]; then echo \[\$BLUE\]; else echo \[\$RED\]; fi\`\$prompt_symbol\[\$NOCOLOR\] "
+  second_line="\`if [ \$? = 0 ]; then echo \[\$BLUE\]; else echo \[\$RED\]; fi\`\$prompt_symbol\[\$DEFAULT\] "
   PS1="\n$first_line\n$second_line"
 
   # Show command execution time
   BCTPostCommand
 
   # Multiline command
-  PS2="\[$BLUE\]$prompt_symbol\[$NOCOLOR\] "
+  PS2="\[$BLUE\]$prompt_symbol\[$DEFAULT\] "
 
   # Terminal title
   local title="$(basename "$PWD")"
