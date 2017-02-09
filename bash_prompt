@@ -108,7 +108,7 @@ function prompt_command() {
 
   # Show delimiter if user or host visible
   local login_delimiter=
-  [ -n "$user_prompt" ] || [ -n "$host_prompt" ] && login_delimiter=":"
+  [ -n "$user_prompt" ] || [ -n "$host_prompt" ] && login_delimiter=" "
 
   # Format prompt
   first_line="$user_prompt$host_prompt$login_delimiter$WHITE\w$DEFAULT$git_prompt$virtual_env_prompt"
