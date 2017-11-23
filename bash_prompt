@@ -39,7 +39,7 @@ esac
 prompt_symbol="❯"
 prompt_clean_symbol=""
 # prompt_dirty_symbol="*"
-prompt_untracked_symbol=' ~'
+prompt_untracked_symbol=' ?'
 prompt_uncommitted_symbol=" ⇢"
 prompt_unpulled_symbol=" ⇣"
 prompt_unpushed_symbol=" ⇡"
