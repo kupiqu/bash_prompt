@@ -38,7 +38,9 @@ esac
 # Symbols
 prompt_symbol="❯"
 prompt_clean_symbol=""
-prompt_dirty_symbol="*"
+# prompt_dirty_symbol="*"
+prompt_untracked_symbol=' ~'
+prompt_uncommitted_symbol=" ⇢"
 prompt_unpulled_symbol=" ⇣"
 prompt_unpushed_symbol=" ⇡"
 prompt_diverged_symbol=" ⇣⇡"
@@ -58,16 +60,29 @@ function prompt_command() {
     branch="${branch##refs/heads/}"
 
     # Working tree status (red when dirty)
-    local dirty=
+    # local dirty=
+    # git diff --no-ext-diff --quiet --exit-code --ignore-submodules 2>/dev/null || dirty=1
+    # [ -z "$dirty" ] && test -n "$(git status --porcelain)" && dirty=1
     # Modified files
-    git diff --no-ext-diff --quiet --exit-code --ignore-submodules 2>/dev/null || dirty=1
+    local modified=
+    git diff --no-ext-diff --quiet --exit-code --ignore-submodules 2>/dev/null || modified=1
     # Untracked files
-    [ -z "$dirty" ] && test -n "$(git status --porcelain)" && dirty=1
+    local untracked=
+    test -n "$(git status --porcelain 2>/dev/null | grep "^??")" && untracked=1
 
     git_prompt=" $CYAN$branch"
-    if [ -n "$dirty" ]; then
-      git_prompt="$git_prompt$prompt_dirty_symbol"
-    else
+    # if [ -n "$dirty" ]; then
+    #   git_prompt="$git_prompt$prompt_dirty_symbol"
+    # else
+    #   git_prompt="$git_prompt$prompt_clean_symbol"
+    # fi
+    if [ -n "$untracked" ]; then
+      git_prompt="$git_prompt$prompt_untracked_symbol"
+    fi
+    if [ -n "$modified" ]; then
+      git_prompt="$git_prompt$prompt_uncommitted_symbol"
+    fi
+    if [ -n "$untracked" ] && [ -n "$modified" ]; then
       git_prompt="$git_prompt$prompt_clean_symbol"
     fi
 
