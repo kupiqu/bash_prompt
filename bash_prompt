@@ -112,6 +112,11 @@ function prompt_command() {
   if [ -n "$VIRTUAL_ENV" ]; then
     virtual_env_prompt=" $YELLOW$prompt_virtual_env_symbol$(basename $VIRTUAL_ENV)$DEFAULT"
   fi
+  # Conda environment if any
+  local conda_prompt=
+  [ -z "$CONDA_PROMPT_MODIFIER" ] && [ -n "$CONDA_EXE" ] &&  conda_prompt="(base) "
+  [ -n "$CONDA_PROMPT_MODIFIER" ] && conda_prompt="$CONDA_PROMPT_MODIFIER"
+  conda_prompt="$RED$conda_prompt$DEFAULT"
 
   # Only show username if not default
   local user_prompt=
@@ -126,7 +131,7 @@ function prompt_command() {
   [ -n "$user_prompt" ] || [ -n "$host_prompt" ] && login_delimiter=" "
 
   # Format prompt
-  first_line="$user_prompt$host_prompt$login_delimiter$WHITE\w$DEFAULT$git_prompt$virtual_env_prompt"
+  first_line="$conda_prompt$user_prompt$host_prompt$login_delimiter$WHITE\w$DEFAULT$git_prompt$virtual_env_prompt"
   # Text (commands) inside \[...\] does not impact line length calculation which fixes stange bug when looking through the history
   # $? is a status of last command, should be processed every time prompt prints
   second_line="\`if [ \$? = 0 ] || [[ \$previous_command == \$this_command ]]; then echo \[\$GREEN\]; else echo \[\$RED\]; fi\`\$prompt_symbol\[\$DEFAULT\] "
